@@ -1,0 +1,117 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <label>1р</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" readonly="" data-ng-model="m.user.wallet.r1">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="moveOneCoinToCashbox(1)">
+                            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>2р</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" readonly="" data-ng-model="m.user.wallet.r2">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="moveOneCoinToCashbox(2)">
+                            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>5р</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" readonly="" data-ng-model="m.user.wallet.r5">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="moveOneCoinToCashbox(5)">
+                            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>10р</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" readonly="" data-ng-model="m.user.wallet.r10">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="moveOneCoinToCashbox(10)">
+                            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Монетоприемник</label>
+                <input type="text" ng-model="cash" readonly="" class="form-control" >
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Напиток</label>
+
+                <ui-select ng-model="m.selectedGood"
+                           theme="bootstrap"
+                           ng-disabled="disabled"
+                           reset-search-input="false">
+                    <ui-select-match placeholder="Выберите напиток">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-choices repeat="good in m.vendingMachine.goods track by $index" refresh-delay="0">
+                        <div>{{good.name}}</div>
+                    </ui-select-choices>
+                </ui-select>
+
+            </div>
+
+            <div class="form-group">
+
+
+              <button ng-click="buy()" ng-disabled="!m.selectedGood || m.selectedGood.price > cash" class="btn-default btn">Купить</button>
+              <button ng-click="cancel()" class="btn-default btn">Отмена</button>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group">
+                <label>1р</label>
+                <input readonly="" type="text" data-ng-model="m.vendingMachine.wallet.r1" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label>2р</label>
+                <input readonly="" type="text" data-ng-model="m.vendingMachine.wallet.r2" class="form-control" >
+            </div>
+
+            <div class="form-group">
+                <label>5р</label>
+                <input readonly="" type="text" data-ng-model="m.vendingMachine.wallet.r5" class="form-control" >
+            </div>
+
+            <div class="form-group">
+                <label>10р</label>
+                <input readonly="" type="text" data-ng-model="m.vendingMachine.wallet.r10" class="form-control" >
+            </div>
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="form-group" ng-repeat="good in m.vendingMachine.goods">
+                <label>{{good.name}}: {{good.price}}р.</label>
+                <input readonly="" type="text" data-ng-model="good.count" class="form-control" >
+            </div>
+
+        </div>
+
+    </div>
+</div>

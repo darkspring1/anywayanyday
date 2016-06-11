@@ -1,0 +1,39 @@
+
+<div class="row" ng-repeat="r in grid">
+<div class="col-md-4 col-sm-4" ng-repeat="c in r">
+    <div class="property equal-height" style="height: 197px;">
+        <figure class="tag status">For Sale</figure>
+        <!--<figure class="type" title="Apartment"><img src="images/property-01.jpg"></figure>-->
+        <a href="http://www.theme-starz.com/html/zoner/property-detail.html">
+            <div class="property-image">
+                <img alt="" src="images/property-01.jpg">
+            </div>
+            <div class="overlay">
+                <div class="info">
+                    <div class="tag price">$ {{c.property.price}}</div>
+                    <h3>3398 Lodgeville Road</h3>
+                    <figure>Golden Valley, MN 55427</figure>
+                </div>
+                <ul class="additional-info">
+                    <li>
+                        <header>Area:</header>
+                        <figure>240m<sup>2</sup></figure>
+                    </li>
+                    <li>
+                        <header>Beds:</header>
+                        <figure>2</figure>
+                    </li>
+                    <li>
+                        <header>Baths:</header>
+                        <figure>2</figure>
+                    </li>
+                    <li>
+                        <header>Garages:</header>
+                        <figure>0</figure>
+                    </li>
+                </ul>
+            </div>
+        </a>
+    </div>
+</div>
+</div>

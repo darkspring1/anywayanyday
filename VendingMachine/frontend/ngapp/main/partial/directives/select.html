@@ -1,0 +1,31 @@
+
+
+    <div class="btn-group bootstrap-select">
+        <button data-ng-if="selected.name" type="button" class="btn dropdown-toggle selectpicker btn-default" data-toggle="dropdown" title="{{selected.name}}">
+            <span class="filter-option pull-left">{{selected.name}}</span>&nbsp;
+            <span class="caret"></span>
+        </button>
+
+        <button data-ng-if="!selected.name" type="button" class="btn dropdown-toggle selectpicker btn-default" data-toggle="dropdown" title="{{default.name}}">
+            <span class="filter-option pull-left">{{default .name}}</span>&nbsp;
+            <span class="caret"></span>
+        </button>
+
+        <div class="dropdown-menu open">
+            <ul class="dropdown-menu inner selectpicker" role="menu">
+                <li ng-class="{ 'selected': default.id == selected.id }">
+                    <a ng-click="onItemClick(item)">
+                        <span class="text">{{default.name}}</span>
+                        <i class="glyphicon glyphicon-ok icon-ok check-mark"></i>
+                    </a>
+                </li>
+
+                <li ng-class="{ 'selected': item.id == selected.id }" data-ng-repeat="item in items">
+                    <a ng-click="onItemClick(item)">
+                        <span class="text">{{item.name}}</span>
+                        <i class="glyphicon glyphicon-ok icon-ok check-mark"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

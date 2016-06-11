@@ -1,0 +1,6 @@
+*packages/
+*bin/
+*obj/
+*.idea/
+*bower_components/
+*.vs/
