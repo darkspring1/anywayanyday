@@ -1,66 +1,64 @@
-﻿using System.Threading.Tasks;
-using Owin;
-using System.Web.Http;
-using Newtonsoft.Json;
+﻿using System;
 using System.Net;
-using System.IO;
-using Microsoft.Owin.FileSystems;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Dispatcher;
+using System.Web.Http.ExceptionHandling;
 using Microsoft.Owin;
+using Microsoft.Owin.Security;
+using Newtonsoft.Json;
 using NLog;
-using VM.Api.StructureMap;
+using Owin;
+using StructureMap;
+using VM.Api.Ioc;
+using VM.Api.Middlewares;
+
 
 namespace VM.Api
 {
-    
+
     class App
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static JsonSerializerSettings json;
-        public void Configuration(IAppBuilder builder)
+        public static Container Container = new Container(new VmRegistry());
+
+        public void Configuration(IAppBuilder app)
         {
-            var configuration = new System.Web.Http.HttpConfiguration();
+            Logger.Debug("Start configuration");
 
-            configuration.DependencyResolver = new StructureMapWebApiDependencyResolver(new VMRegistry());
+            var config = new HttpConfiguration();
 
-            configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
-            configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
-            configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-            configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
 
-            json = configuration.Formatters.JsonFormatter.SerializerSettings;
+            config.Services.Add(typeof(IExceptionLogger), new NLogExceptionLogger());
+            config.Services.Replace(typeof(IHttpControllerActivator), new StructureMapWebApiControllerActivator(Container));
 
-            configuration.Routes.MapHttpRoute("api", "api/{controller}/{action}");
+            //configuration.Routes.MapHttpRoute("api", "api/{controller}/{action}");
+            config.MapHttpAttributeRoutes();
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
 
-            configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
-            var fsConfig = new Microsoft.Owin.StaticFiles.FileServerOptions
-                {
-                    EnableDirectoryBrowsing = true,
-                    FileSystem = new PhysicalFileSystem(Settings.RootPath),
-                    RequestPath = PathString.Empty,
-                    EnableDefaultFiles = true
-                    
-                };
-
-            fsConfig.DefaultFilesOptions.DefaultFileNames = new[] { "index.html" };
-
-            builder
-                .UseFileServer(fsConfig)
-                .UseWebApi(configuration)
-                
+            app
+                .UseLogger()
+                .UseWebApi(config)
                 .Use((c, next) =>
                 {
-
-                    var path = c.Request.Path.Value;
-                    if (path.Contains(".") || path.Contains("api/"))
-                    {
-                        c.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                        return Task.FromResult(0);
-                    }
-                    
-                    return c.Response.SendFileAsync(Path.Combine(Settings.RootPath, "index.html"));   
+                    c.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    return Task.FromResult(0);
                 });
+
+
+            Logger.Debug("Configuration finished");
         }
     }
 }

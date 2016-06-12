@@ -6,13 +6,17 @@ namespace VM.Api
 {
     public class Service
     {
-
-
         IDisposable _app;
-    
-        public void Start() {
-            _app = WebApp.Start<App>(Settings.HostUrl);
+
+        public void Start(string url, int port)
+        {
+            _app = WebApp.Start<App>(string.Format("{0}:{1}", url, port));
         }
-        public void Stop() { _app.Dispose(); }
+
+        public void Stop()
+        {
+            App.Container.Dispose();
+            _app.Dispose();
+        }
     }
 }

@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VM.Api
 {
-    class Settings
+    public class Settings
     {
-        public static string RootPath { get { return ConfigurationManager.AppSettings["rootPath"]; }  }
-        public static string HostUrl { get { return ConfigurationManager.AppSettings["hostUrl"]; } }
+        public static string Url { get; private set; }
+        public static string Port { get; private set; }
+
+        public static string AppName { get; private set; }
+        
+        static Settings()
+        {
+            Url = ConfigurationManager.AppSettings["url"];
+            Port = ConfigurationManager.AppSettings["port"];
+            AppName = ConfigurationManager.AppSettings["appName"];
+        }
     }
+    
 }

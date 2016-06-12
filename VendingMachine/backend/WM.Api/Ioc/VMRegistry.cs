@@ -2,11 +2,11 @@
 using VM.Business.Dal;
 using VM.Dal.EF;
 
-namespace VM.Api.StructureMap
+namespace VM.Api.Ioc
 {
-    public class VMRegistry : Registry
+    public class VmRegistry : Registry
     {
-        public VMRegistry()
+        public VmRegistry()
         {
 
             For<DataContext>().Use<DataContext>().Ctor<string>("connectionString").Is("vm");
