@@ -1,21 +1,23 @@
 ﻿using VM.Business.Dal;
 using VM.Business.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Linq;
 using VM.Business.Contracts;
 
 namespace VM.Business.Services
 {
     public class VendingMachineService
     {
-        IRepositoryProvider _repositoryProvider;
-        public VendingMachineService(IRepositoryProvider repositoryProvider)
+        private readonly IRepository<VendingMachine> _vendingMachineRepository;
+        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Good> _goodRepository;
+        public VendingMachineService(IRepository<VendingMachine> vendingMachineRepository, IRepository<User> userRepository,
+            IRepository<Good> goodRepository)
         {
-            _repositoryProvider = repositoryProvider;
+            _vendingMachineRepository = vendingMachineRepository;
+            _userRepository = userRepository;
+            _goodRepository = goodRepository;
         }
 
 
@@ -106,19 +108,16 @@ namespace VM.Business.Services
 
         public User CreateNewUser()
         {
-            var userRepo = _repositoryProvider.GetRepository<User>();
-            User u = new User();
-            u.Wallet = GetInitedWallet();
-            userRepo.Add(u);
-            userRepo.SaveChanges();
+            User u = new User {Wallet = GetInitedWallet()};
+            _userRepository.Add(u);
+            _userRepository.SaveChanges();
             return u;
         }
 
 
         public User GetUserById(int id)
         {
-            var userRepo = _repositoryProvider.GetRepository<User>();
-            return userRepo
+            return _userRepository
                 .GetAll()
                 .Include(u => u.Wallet)
                 .FirstOrDefault(u => u.Id == id);
@@ -126,8 +125,7 @@ namespace VM.Business.Services
 
         public VendingMachine GetVendingMachine()
         {
-            var vmRepo = _repositoryProvider.GetRepository<VendingMachine>();
-            return vmRepo
+            return _vendingMachineRepository
                 .GetAll()
                 .Include(vm => vm.Wallet)
                 .Include(vm => vm.Goods)
@@ -136,36 +134,37 @@ namespace VM.Business.Services
 
         public VendingMachine CreateVendingMachine()
         {
-            var vmRepo = _repositoryProvider.GetRepository<VendingMachine>();
-            var vm = new VendingMachine();
-            vm.Wallet = GetInitedWallet();
-
-            vm.Goods = new List<Good>(){
-                new Good { Name = "Чай", Count = 10, Price = 13 },
-                new Good { Name = "Кофе", Count = 20, Price = 18 },
-                new Good { Name = "Кофе с молоком", Count = 21, Price = 20 },
-                new Good { Name = "Сок", Count = 15, Price = 35 }
+            var vm = new VendingMachine
+            {
+                Wallet = GetInitedWallet(),
+                Goods = new List<Good>()
+                {
+                    new Good {Name = "Чай", Count = 10, Price = 13},
+                    new Good {Name = "Кофе", Count = 20, Price = 18},
+                    new Good {Name = "Кофе с молоком", Count = 21, Price = 20},
+                    new Good {Name = "Сок", Count = 15, Price = 35}
+                }
             };
-            
-            vmRepo.Add(vm);
-            vmRepo.SaveChanges();
+
+
+            _vendingMachineRepository.Add(vm);
+            _vendingMachineRepository.SaveChanges();
             return vm;
         }
 
         public BuyResponse Buy(Buy contract)
         {
-            var goodRepo = _repositoryProvider.GetRepository<Good>();
 
-            var good = goodRepo.GetById(contract.GoodId);
+            var good = _goodRepository.GetById(contract.GoodId);
 
             if (good.Count <= 0)
             {
-                return new BuyResponse { Code = ResponseCode.NoGood };
+                return new BuyResponse {Code = ResponseCode.NoGood};
             }
 
             if (good.Price > contract.CashBox.Total())
             {
-                return new BuyResponse { Code = ResponseCode.SmallCash };
+                return new BuyResponse {Code = ResponseCode.SmallCash};
             }
 
 
@@ -182,24 +181,21 @@ namespace VM.Business.Services
 
             if (trifleWallet == null)
             {
-                return new BuyResponse { Code = ResponseCode.NoTrifle };
+                return new BuyResponse {Code = ResponseCode.NoTrifle};
             }
-            else
+
+
+            MoveAllCoins(usr.Wallet, trifleWallet);
+            good.Count--;
+            _goodRepository.SaveChanges();
+
+            return new BuyResponse
             {
-                
-                MoveAllCoins(usr.Wallet, trifleWallet);
-                good.Count--;
-                goodRepo.SaveChanges();
+                Code = ResponseCode.Ok,
+                User = usr,
+                VendingMachine = vm
+            };
 
-                return new BuyResponse {
-                    Code = ResponseCode.Ok,
-                    User = usr,
-                    VendingMachine = vm
-                };
-            }
-
-            
-            
         }
 
     }

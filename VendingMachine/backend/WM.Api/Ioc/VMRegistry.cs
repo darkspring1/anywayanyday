@@ -8,10 +8,8 @@ namespace VM.Api.Ioc
     {
         public VmRegistry()
         {
-
             For<DataContext>().Use<DataContext>().Ctor<string>("connectionString").Is("vm");
-            For<IRepositoryProvider>().Use<RepositoryProvider>();
-
+            For(typeof(IRepository<>)).Use(typeof(Repository<>));
         }
     }
 }

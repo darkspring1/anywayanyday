@@ -4,12 +4,11 @@ using System.Linq;
 
 namespace VM.Dal.EF
 {
-    class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
+        readonly DbSet<T> _set;
 
-        DbSet<T> _set;
-
-        DataContext _context;
+        readonly DataContext _context;
         public Repository(DataContext context)
         {
             _set = context.Set<T>();

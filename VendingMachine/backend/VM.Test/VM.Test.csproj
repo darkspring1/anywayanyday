@@ -64,7 +64,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Mock\IRepository.cs" />
-    <Compile Include="Mock\RepositoryProvider.cs" />
     <Compile Include="Mock\VendingMachineRepository.cs" />
     <Compile Include="Mock\UserRepository.cs" />
     <Compile Include="Mock\GoodRepository.cs" />

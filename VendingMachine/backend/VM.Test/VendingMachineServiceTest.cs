@@ -21,7 +21,6 @@ namespace VM.Test
 
         public VendingMachineServiceTest()
         {
-            RepositoryProvider rp = new RepositoryProvider();
             _vmService = new VendingMachineService(rp);
             _vmServicePrivateObject = new PrivateObject(_vmService);
         }
