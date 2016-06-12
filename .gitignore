@@ -5,3 +5,4 @@
 *bower_components/
 *.vs/
 VendingMachine/backend/backend.sln.DotSettings.user
+*node_modules/

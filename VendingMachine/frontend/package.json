@@ -1,0 +1,11 @@
+{
+  "name": "",
+  "description": "",
+  "version": "",
+  "homepage": "",
+
+  "dependencies": {
+	 "express" : "",
+	 "http-proxy": ""
+  }
+}
