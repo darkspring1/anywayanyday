@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using VM.Business.Entities;
 
-namespace VM.Business.Contracts
+namespace VM.Business.Dto
 {
     public enum ResponseCode
     {

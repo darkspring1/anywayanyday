@@ -51,8 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\BuyResponse.cs" />
-    <Compile Include="Contracts\Buy.cs" />
+    <Compile Include="Dto\BuyResponse.cs" />
+    <Compile Include="Dto\Buy.cs" />
     <Compile Include="Dal\IRepository.cs" />
     <Compile Include="Entities\Good.cs" />
     <Compile Include="Entities\Wallet.cs" />

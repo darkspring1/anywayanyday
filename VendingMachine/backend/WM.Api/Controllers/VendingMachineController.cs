@@ -1,7 +1,7 @@
 ﻿using VM.Business.Entities;
 using VM.Business.Services;
 using System.Web.Http;
-using VM.Business.Contracts;
+using VM.Business.Dto;
 
 
 namespace VM.Api.Controllers
@@ -35,9 +35,9 @@ namespace VM.Api.Controllers
         }
 
         [HttpPost]
-        public object Buy([FromBody]Buy c)
+        public BuyResponse Buy([FromBody]Buy model)
         {
-            return _vmService.Buy(c);
+            return _vmService.Buy(model);
         }
 
     }

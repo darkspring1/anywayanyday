@@ -3,7 +3,7 @@ using VM.Business.Entities;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using VM.Business.Contracts;
+using VM.Business.Dto;
 
 namespace VM.Business.Services
 {

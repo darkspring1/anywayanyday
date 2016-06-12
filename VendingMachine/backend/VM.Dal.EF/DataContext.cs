@@ -24,10 +24,5 @@ namespace VM.Dal.EF
             modelBuilder.Entity<User>().ToTable("Users", schema);
             modelBuilder.Entity<Wallet>().ToTable("Wallets", schema);
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
     }
 }
