@@ -16,13 +16,6 @@
   "dependencies": {
     "angular": "~1.5",
     "bootstrap": "~3.3",
-	"jquery": "~1.9",
-    "angular-ui-router": "~0.2",
-	"lodash": "",
-	"ui-select": "https://github.com/angular-ui/ui-select.git"
-  },
-  
-    "resolutions": {
-     "angular": "~1.5.13"
+	"angular-ui-select": "~0.18"
   }
 }
