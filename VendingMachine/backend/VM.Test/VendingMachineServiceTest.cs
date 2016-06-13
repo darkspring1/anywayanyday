@@ -6,6 +6,7 @@ using VM.Business.Entities;
 using VM.Test.Mock;
 using VM.Business.Contracts;
 using System.Collections.Generic;
+using VM.Business.Dto;
 
 namespace VM.Test
 {
@@ -48,7 +49,7 @@ namespace VM.Test
         }
 
         [TestMethod]
-        public void Buy()
+        public void BuyTest()
         {
             int endedGoodId = GoodRepository.Goods.First(g => g.Count == 0).Id;
             int goodId = GoodRepository.Goods.First(g => g.Count > 0).Id;

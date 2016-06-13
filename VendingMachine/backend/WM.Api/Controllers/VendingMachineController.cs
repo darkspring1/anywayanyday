@@ -1,4 +1,7 @@
-﻿using VM.Business.Entities;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
+using VM.Business.Entities;
 using VM.Business.Services;
 using System.Web.Http;
 using VM.Business.Dto;
@@ -15,6 +18,10 @@ namespace VM.Api.Controllers
             _vmService = vmService;
         }
 
+        
+            
+        
+
         [HttpGet]
         public object Init([FromUri]int? userId = null)
         {
@@ -30,7 +37,7 @@ namespace VM.Api.Controllers
             }
 
             var vm = _vmService.GetVendingMachine() ?? _vmService.CreateVendingMachine();
-
+            
             return new { user = u, vendingMachine = vm };
         }
 
