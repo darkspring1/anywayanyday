@@ -6,9 +6,6 @@ using VM.Test.Dal;
 using VM.Test.Ioc;
 using Container = StructureMap.Container;
 using IContainer = StructureMap.IContainer;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.ComponentModel;
 using VM.Business.Dto;
 using System.Linq;
 
@@ -17,8 +14,6 @@ namespace VM.Test
     [TestClass]
     public class VendingMachineControllerTest
     {
-
-
         private readonly IContainer _container;
         private readonly VendingMachineController _controller;
         private readonly IRepository<VendingMachine> _vmRepository;
@@ -27,6 +22,14 @@ namespace VM.Test
 
         Wallet EmptyWallet { get { return new Wallet(); } }
         Wallet FullWallet { get { return new Wallet { r1 = 100, r2 = 100, r5 = 100, r10 = 100 }; } }
+
+        void AddGoodsToRepository()
+        {
+            _goodRepository.Add(new Good { Id = 1, Name = "Чай", Count = 0, Price = 13 });
+            _goodRepository.Add(new Good { Id = 2, Name = "Кофе", Count = 1, Price = 18 });
+            _goodRepository.Add(new Good { Id = 3, Name = "Кофе с молоком", Count = 1, Price = 20 });
+            _goodRepository.Add(new Good { Id = 4, Name = "Сок", Count = 1, Price = 35 });
+        }
 
         public VendingMachineControllerTest()
         {
@@ -63,16 +66,6 @@ namespace VM.Test
             var result = _controller.Init(1);
             Assert.AreEqual(result.VendingMachine.Id, 1);
             Assert.AreEqual(result.User.Id, 0);
-        }
-
-
-
-        void AddGoodsToRepository()
-        {
-            _goodRepository.Add(new Good { Id = 1, Name = "Чай", Count = 0, Price = 13 });
-            _goodRepository.Add(new Good { Id = 2, Name = "Кофе", Count = 1, Price = 18 });
-            _goodRepository.Add(new Good { Id = 3, Name = "Кофе с молоком", Count = 1, Price = 20 });
-            _goodRepository.Add(new Good { Id = 4, Name = "Сок", Count = 1, Price = 35 });
         }
 
         [TestMethod]
@@ -131,10 +124,6 @@ namespace VM.Test
             Assert.AreEqual(_controller.Buy(contractOk).Code, ResponseCode.Ok);
         }
 
-
-        /// <summary>
-        
-        /// </summary>
         [TestMethod]
         public void BuyUserSmallCashTest()
         {
