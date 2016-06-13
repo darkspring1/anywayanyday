@@ -7,14 +7,18 @@ namespace VM.Business.Dto
     {
         Ok = 0,
         /// <summary>
-        /// мало денег
+        /// мало денег в манетоприёмнике
         /// </summary>
         SmallCash = 1,
         /// <summary>
         /// нет сдачи
         /// </summary>
         NoTrifle = 2,
-        NoGood = 3
+        NoGood = 3,
+            /// <summary>
+            /// мало денег у пользователя
+            /// </summary>
+        UserSmallCash = 4,
 
     };
     public class BuyResponse

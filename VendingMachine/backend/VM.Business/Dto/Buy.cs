@@ -7,6 +7,10 @@ namespace VM.Business.Dto
         public int UserId { get; set; }
         
         public int GoodId { get; set; }
+
+        /// <summary>
+        /// манетоприёмник
+        /// </summary>
         public Wallet CashBox { get; set; }
     }
 }

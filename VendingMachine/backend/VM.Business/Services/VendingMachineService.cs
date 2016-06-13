@@ -106,7 +106,7 @@ namespace VM.Business.Services
             };
         }
 
-        public User CreateNewUser()
+        User CreateNewUser()
         {
             User u = new User {Wallet = GetInitedWallet()};
             _userRepository.Add(u);
@@ -114,8 +114,7 @@ namespace VM.Business.Services
             return u;
         }
 
-
-        public User GetUserById(int id)
+        User GetUserById(int id)
         {
             return _userRepository
                 .GetAll()
@@ -123,7 +122,7 @@ namespace VM.Business.Services
                 .FirstOrDefault(u => u.Id == id);
         }
 
-        public VendingMachine GetVendingMachine()
+        VendingMachine GetVendingMachine()
         {
             return _vendingMachineRepository
                 .GetAll()
@@ -132,7 +131,7 @@ namespace VM.Business.Services
                 .FirstOrDefault();
         }
 
-        public VendingMachine CreateVendingMachine()
+        VendingMachine CreateVendingMachine()
         {
             var vm = new VendingMachine
             {
@@ -174,6 +173,11 @@ namespace VM.Business.Services
 
             var usr = GetUserById(contract.UserId);
 
+            if (good.Price > usr.Wallet.Total())
+            {
+                return new BuyResponse { Code = ResponseCode.UserSmallCash };
+            }
+
             SubWallets(usr.Wallet, contract.CashBox);
             MoveAllCoins(vm.Wallet, contract.CashBox);
 
@@ -196,6 +200,24 @@ namespace VM.Business.Services
                 VendingMachine = vm
             };
 
+        }
+
+        public InitResponse Init(int? userId = null)
+        {
+            User u;
+            if (userId == null)
+            {
+                u = CreateNewUser();
+            }
+            else
+            {
+                u = GetUserById(userId.Value);
+                u = u ?? CreateNewUser();
+            }
+
+            var vm = GetVendingMachine() ?? CreateVendingMachine();
+
+            return new InitResponse { User = u, VendingMachine = vm };
         }
 
     }
